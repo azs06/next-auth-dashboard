@@ -8,8 +8,7 @@ const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
   title: "Admin Dashboard",
-  description: "Next.js Admin Dashboard with Tailwind CSS",
-    generator: 'v0.dev'
+  description: "Next.js Admin Dashboard",
 }
 
 export default function RootLayout({
@@ -27,7 +26,3 @@ export default function RootLayout({
     </html>
   )
 }
-
-
-
-import './globals.css'
