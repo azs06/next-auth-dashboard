@@ -23,7 +23,7 @@ export default function DashboardSidebar() {
     { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
     { name: "Users", href: "/dashboard/users", icon: Users },
     { name: "Settings", href: "/dashboard/settings", icon: Settings },
-    { name: "Help", href: "/dashboard/help", icon: HelpCircle },
+    /* { name: "Help", href: "/dashboard/help", icon: HelpCircle }, */
   ]
 
   return (
