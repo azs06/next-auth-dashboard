@@ -23,11 +23,7 @@ export default function LoginForm() {
     e.preventDefault();
     setIsLoading(true);
 
-    console.log({ API_URL });
-
     try {
-      // In a real app, you would validate credentials against a backend
-      // This is a simplified example
 
       const response = await fetch(`http://localhost:3002/api/auth/login`, {
         method: "POST",
@@ -35,8 +31,8 @@ export default function LoginForm() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          email: "soikat@example.com",
-          password: "admin123",
+          email,
+          password
         }),
       });
 
