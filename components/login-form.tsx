@@ -10,7 +10,7 @@ import { Label } from "@/components/ui/label";
 import { useToast } from "@/components/ui/use-toast";
 import { Loader2 } from "lucide-react";
 
-const API_URL = process.env.API_URL;
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export default function LoginForm() {
   const [isLoading, setIsLoading] = useState(false);
@@ -29,28 +29,26 @@ export default function LoginForm() {
       // In a real app, you would validate credentials against a backend
       // This is a simplified example
 
-      const response = await fetch(`${API_URL}/login`, {
-        method: "post",
+      const response = await fetch(`http://localhost:3002/api/auth/login`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
         body: JSON.stringify({
-          email,
-          password,
+          email: "soikat@example.com",
+          password: "admin123",
         }),
       });
 
-      const data = response.json();
-
-      console.log({ data });
-
       if (response.ok) {
         // Store authentication state
+        const data = await response.json();
+        
         localStorage.setItem("isAuthenticated", "true");
+        localStorage.setItem("token", data.token);
         localStorage.setItem(
           "user",
-          JSON.stringify({
-            name: "Admin User",
-            email: "admin@example.com",
-            role: "admin",
-          })
+          JSON.stringify(data.user)
         );
 
         toast({
