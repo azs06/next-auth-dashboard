@@ -23,6 +23,8 @@ export default function LoginForm() {
     e.preventDefault();
     setIsLoading(true);
 
+    console.log({ API_URL });
+
     try {
       // In a real app, you would validate credentials against a backend
       // This is a simplified example
