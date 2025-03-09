@@ -1,16 +1,50 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight, MoreHorizontal, Search, UserPlus } from "lucide-react"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Badge } from "@/components/ui/badge"
+import { useState, useEffect } from "react";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import {
+  ChevronLeft,
+  ChevronRight,
+  ChevronsLeft,
+  ChevronsRight,
+  MoreHorizontal,
+  Search,
+  UserPlus,
+} from "lucide-react";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
+
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
+const token = localStorage.getItem("token") || "";
+
+const fetchUsers = async () => {
+  const response = await fetch(`${API_URL}/users/`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  const result = await response.json();
+  console.log({ result });
+  return result;
+};
 
 // Mock data for users
-const users = [
+const defaultUsers = [
   {
     id: "1",
     name: "John Doe",
@@ -101,25 +135,37 @@ const users = [
     lastActive: "3 weeks ago",
     avatar: "/placeholder.svg?height=40&width=40",
   },
-]
+];
 
 export function UsersTable() {
-  const [searchTerm, setSearchTerm] = useState("")
-  const [currentPage, setCurrentPage] = useState(1)
-  const itemsPerPage = 5
+  const [searchTerm, setSearchTerm] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [users, setUsers] = useState([...defaultUsers])
+  const itemsPerPage = 5;
+
+  useEffect(() => {
+    const fetchAndSetUsers = async () => {
+      const users = await fetchUsers();
+      setUsers(users);
+    };
+    fetchAndSetUsers();
+  }, [])
 
   // Filter users based on search term
   const filteredUsers = users.filter(
     (user) =>
       user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       user.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      user.role.toLowerCase().includes(searchTerm.toLowerCase()),
-  )
+      user.role.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   // Calculate pagination
-  const totalPages = Math.ceil(filteredUsers.length / itemsPerPage)
-  const startIndex = (currentPage - 1) * itemsPerPage
-  const paginatedUsers = filteredUsers.slice(startIndex, startIndex + itemsPerPage)
+  const totalPages = Math.ceil(filteredUsers.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const paginatedUsers = filteredUsers.slice(
+    startIndex,
+    startIndex + itemsPerPage
+  );
 
   return (
     <div className="space-y-4">
@@ -163,13 +209,21 @@ export function UsersTable() {
                       </Avatar>
                       <div>
                         <p className="font-medium">{user.name}</p>
-                        <p className="text-sm text-muted-foreground">{user.email}</p>
+                        <p className="text-sm text-muted-foreground">
+                          {user.email}
+                        </p>
                       </div>
                     </div>
                   </TableCell>
                   <TableCell>{user.role}</TableCell>
                   <TableCell>
-                    <Badge variant={user.status === "Active" ? "default" : "secondary"}>{user.status}</Badge>
+                    <Badge
+                      variant={
+                        user.status === "Active" ? "default" : "secondary"
+                      }
+                    >
+                      {user.status}
+                    </Badge>
                   </TableCell>
                   <TableCell>{user.lastActive}</TableCell>
                   <TableCell>
@@ -184,7 +238,9 @@ export function UsersTable() {
                         <DropdownMenuItem>View Profile</DropdownMenuItem>
                         <DropdownMenuItem>Edit User</DropdownMenuItem>
                         <DropdownMenuItem>Change Role</DropdownMenuItem>
-                        <DropdownMenuItem className="text-destructive">Delete User</DropdownMenuItem>
+                        <DropdownMenuItem className="text-destructive">
+                          Delete User
+                        </DropdownMenuItem>
                       </DropdownMenuContent>
                     </DropdownMenu>
                   </TableCell>
@@ -204,11 +260,17 @@ export function UsersTable() {
       {/* Pagination */}
       <div className="flex items-center justify-between">
         <p className="text-sm text-muted-foreground">
-          Showing {startIndex + 1} to {Math.min(startIndex + itemsPerPage, filteredUsers.length)} of{" "}
+          Showing {startIndex + 1} to{" "}
+          {Math.min(startIndex + itemsPerPage, filteredUsers.length)} of{" "}
           {filteredUsers.length} users
         </p>
         <div className="flex items-center space-x-2">
-          <Button variant="outline" size="icon" onClick={() => setCurrentPage(1)} disabled={currentPage === 1}>
+          <Button
+            variant="outline"
+            size="icon"
+            onClick={() => setCurrentPage(1)}
+            disabled={currentPage === 1}
+          >
             <ChevronsLeft className="h-4 w-4" />
             <span className="sr-only">First page</span>
           </Button>
@@ -242,6 +304,5 @@ export function UsersTable() {
         </div>
       </div>
     </div>
-  )
+  );
 }
-
