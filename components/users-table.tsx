@@ -39,7 +39,6 @@ const fetchUsers = async () => {
     },
   });
   const result = await response.json();
-  console.log({ result });
   return result;
 };
 
