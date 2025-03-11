@@ -54,102 +54,22 @@ const defaultUsers = [
     lastActive: "2 hours ago",
     avatar: "/placeholder.svg?height=40&width=40",
   },
-  {
-    id: "2",
-    name: "Jane Smith",
-    email: "jane.smith@example.com",
-    role: "User",
-    status: "Active",
-    lastActive: "5 hours ago",
-    avatar: "/placeholder.svg?height=40&width=40",
-  },
-  {
-    id: "3",
-    name: "Robert Johnson",
-    email: "robert.johnson@example.com",
-    role: "User",
-    status: "Inactive",
-    lastActive: "1 day ago",
-    avatar: "/placeholder.svg?height=40&width=40",
-  },
-  {
-    id: "4",
-    name: "Emily Davis",
-    email: "emily.davis@example.com",
-    role: "Editor",
-    status: "Active",
-    lastActive: "2 days ago",
-    avatar: "/placeholder.svg?height=40&width=40",
-  },
-  {
-    id: "5",
-    name: "Michael Wilson",
-    email: "michael.wilson@example.com",
-    role: "User",
-    status: "Inactive",
-    lastActive: "3 days ago",
-    avatar: "/placeholder.svg?height=40&width=40",
-  },
-  {
-    id: "6",
-    name: "Sarah Brown",
-    email: "sarah.brown@example.com",
-    role: "User",
-    status: "Active",
-    lastActive: "4 days ago",
-    avatar: "/placeholder.svg?height=40&width=40",
-  },
-  {
-    id: "7",
-    name: "David Miller",
-    email: "david.miller@example.com",
-    role: "Editor",
-    status: "Active",
-    lastActive: "5 days ago",
-    avatar: "/placeholder.svg?height=40&width=40",
-  },
-  {
-    id: "8",
-    name: "Jessica Taylor",
-    email: "jessica.taylor@example.com",
-    role: "User",
-    status: "Active",
-    lastActive: "1 week ago",
-    avatar: "/placeholder.svg?height=40&width=40",
-  },
-  {
-    id: "9",
-    name: "Thomas Anderson",
-    email: "thomas.anderson@example.com",
-    role: "User",
-    status: "Inactive",
-    lastActive: "2 weeks ago",
-    avatar: "/placeholder.svg?height=40&width=40",
-  },
-  {
-    id: "10",
-    name: "Jennifer White",
-    email: "jennifer.white@example.com",
-    role: "Admin",
-    status: "Active",
-    lastActive: "3 weeks ago",
-    avatar: "/placeholder.svg?height=40&width=40",
-  },
 ];
 
 export function UsersTable() {
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const [users, setUsers] = useState([...defaultUsers])
+  const [users, setUsers] = useState([...defaultUsers]);
   const itemsPerPage = 5;
 
   useEffect(() => {
     const fetchAndSetUsers = async () => {
       const users = await fetchUsers();
       setUsers(users);
+      console.log({ users });
     };
     fetchAndSetUsers();
-  }, [])
+  }, []);
 
   // Filter users based on search term
   const filteredUsers = users.filter(
@@ -219,13 +139,13 @@ export function UsersTable() {
                   <TableCell>
                     <Badge
                       variant={
-                        user.status === "Active" ? "default" : "secondary"
+                        user.isActive ? "default" : "secondary"
                       }
                     >
-                      {user.status}
+                      {user.isActive ? 'Active' : 'Inactive'}
                     </Badge>
                   </TableCell>
-                  <TableCell>{user.lastActive}</TableCell>
+                  <TableCell>{user.lastLogin}</TableCell>
                   <TableCell>
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
