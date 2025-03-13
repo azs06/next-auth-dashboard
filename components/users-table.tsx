@@ -134,7 +134,7 @@ export function UsersTable() {
                       </div>
                     </div>
                   </TableCell>
-                  <TableCell>{user.role}</TableCell>
+                  <TableCell>{user.roles}</TableCell>
                   <TableCell>
                     <Badge
                       variant={
