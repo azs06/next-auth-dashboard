@@ -32,7 +32,7 @@ import { Badge } from "@/components/ui/badge";
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 const token = localStorage.getItem("token") || "";
 
-const fetchUsers = async () => {
+const fetchData = async () => {
   const response = await fetch(`${API_URL}/roles/`, {
     headers: {
       Authorization: `Bearer ${token}`,
@@ -55,33 +55,51 @@ const defaultUsers = [
   },
 ];
 
+const defaultRoles = [
+  {
+    id: 1,
+    name: "Admin",
+    description: "System administrator with full access",
+    createdAt: "2025-02-25T09:01:05.000Z",
+    updatedAt: "2025-02-25T09:01:05.000Z",
+    permissions: [
+      {
+        id: 1,
+        name: "view_users",
+        description: "View user profiles",
+        resourceType: "user",
+        actionType: "read",
+        createdAt: "2025-02-25T09:01:05.000Z",
+      },
+    ],
+  },
+];
+
 export function RolesTable() {
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [users, setUsers] = useState([...defaultUsers]);
+  const [roles, setRoles] = useState([...defaultRoles])
   const itemsPerPage = 5;
 
   useEffect(() => {
     const fetchAndSetUsers = async () => {
-      const users = await fetchUsers();
-      setUsers(users);
-      console.log({ users });
+      const roles = await fetchData();
+      setRoles(roles)
     };
     fetchAndSetUsers();
   }, []);
 
   // Filter users based on search term
-  const filteredUsers = users.filter(
+  const filteredRoles = roles.filter(
     (user) =>
-      user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      user.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      user.role.toLowerCase().includes(searchTerm.toLowerCase())
+      user.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   // Calculate pagination
-  const totalPages = Math.ceil(filteredUsers.length / itemsPerPage);
+  const totalPages = Math.ceil(filteredRoles.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
-  const paginatedUsers = filteredUsers.slice(
+  const paginatedRoles = filteredRoles.slice(
     startIndex,
     startIndex + itemsPerPage
   );
@@ -101,7 +119,7 @@ export function RolesTable() {
         </div>
         <Button>
           <UserPlus className="mr-2 h-4 w-4" />
-          Add User
+          Add Role
         </Button>
       </div>
 
@@ -109,42 +127,25 @@ export function RolesTable() {
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>User</TableHead>
-              <TableHead>Role</TableHead>
-              <TableHead>Status</TableHead>
-              <TableHead>Last Active</TableHead>
+              <TableHead>Name</TableHead>
+              <TableHead>Dsecription</TableHead>
+              <TableHead>Permissions</TableHead>
               <TableHead className="w-[50px]"></TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
-            {paginatedUsers.length > 0 ? (
-              paginatedUsers.map((user) => (
-                <TableRow key={user.id}>
+            {paginatedRoles.length > 0 ? (
+              paginatedRoles.map((role) => (
+                <TableRow key={role.id}>
                   <TableCell>
                     <div className="flex items-center gap-3">
-                      <Avatar>
-                        <AvatarImage src={user.avatar} alt={user.name} />
-                        <AvatarFallback>{user.name.charAt(0)}</AvatarFallback>
-                      </Avatar>
                       <div>
-                        <p className="font-medium">{user.name}</p>
-                        <p className="text-sm text-muted-foreground">
-                          {user.email}
-                        </p>
+                        <p className="font-medium">{role.name}</p>
                       </div>
                     </div>
                   </TableCell>
-                  <TableCell>{user.roles}</TableCell>
-                  <TableCell>
-                    <Badge
-                      variant={
-                        user.isActive ? "default" : "secondary"
-                      }
-                    >
-                      {user.isActive ? 'Active' : 'Inactive'}
-                    </Badge>
-                  </TableCell>
-                  <TableCell>{user.lastLogin}</TableCell>
+                  <TableCell>{role.description}</TableCell>
+                  <TableCell>{role.permissions.join(', ')}</TableCell>
                   <TableCell>
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
@@ -154,12 +155,7 @@ export function RolesTable() {
                         </Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end">
-                        <DropdownMenuItem>View Profile</DropdownMenuItem>
-                        <DropdownMenuItem>Edit User</DropdownMenuItem>
-                        <DropdownMenuItem>Change Role</DropdownMenuItem>
-                        <DropdownMenuItem className="text-destructive">
-                          Delete User
-                        </DropdownMenuItem>
+                        <DropdownMenuItem>Edit Role</DropdownMenuItem>
                       </DropdownMenuContent>
                     </DropdownMenu>
                   </TableCell>
@@ -168,7 +164,7 @@ export function RolesTable() {
             ) : (
               <TableRow>
                 <TableCell colSpan={5} className="h-24 text-center">
-                  No users found.
+                  No roles found.
                 </TableCell>
               </TableRow>
             )}
@@ -180,8 +176,8 @@ export function RolesTable() {
       <div className="flex items-center justify-between">
         <p className="text-sm text-muted-foreground">
           Showing {startIndex + 1} to{" "}
-          {Math.min(startIndex + itemsPerPage, filteredUsers.length)} of{" "}
-          {filteredUsers.length} users
+          {Math.min(startIndex + itemsPerPage, filteredRoles.length)} of{" "}
+          {filteredRoles.length} users
         </p>
         <div className="flex items-center space-x-2">
           <Button
