@@ -75,22 +75,21 @@ const defaultRoles = [
 export function RolesTable() {
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const [users, setUsers] = useState([...defaultUsers]);
-  const [roles, setRoles] = useState([...defaultRoles])
+  const [roles, setRoles] = useState([...defaultRoles]);
   const itemsPerPage = 5;
+
 
   useEffect(() => {
     const fetchAndSetUsers = async () => {
       const roles = await fetchData();
-      setRoles(roles)
+      setRoles(roles);
     };
     fetchAndSetUsers();
   }, []);
 
   // Filter users based on search term
-  const filteredRoles = roles.filter(
-    (user) =>
-      user.name.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredRoles = roles.filter((user) =>
+    user.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   // Calculate pagination
@@ -108,7 +107,7 @@ export function RolesTable() {
           <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
           <Input
             type="search"
-            placeholder="Search users..."
+            placeholder="Search roles..."
             className="pl-8"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
@@ -142,7 +141,7 @@ export function RolesTable() {
                     </div>
                   </TableCell>
                   <TableCell>{role.description}</TableCell>
-                  <TableCell>{role.permissions.join(', ')}</TableCell>
+                  <TableCell>{role.permissions.map(permission => permission.name).join(',')}</TableCell>
                   <TableCell>
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>

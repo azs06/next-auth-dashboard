@@ -39,36 +39,34 @@ const fetchData = async () => {
   return result;
 };
 
-
 const defaultPermissions = [
-    {
-      id: 1,
-      name: "view_users",
-      description: "View user profiles",
-      resourceType: "user",
-      actionType: "read",
-      createdAt: "2025-02-25T09:01:05.000Z",
-    },
-  ],;
+  {
+    id: 1,
+    name: "view_users",
+    description: "View user profiles",
+    resourceType: "user",
+    actionType: "read",
+    createdAt: "2025-02-25T09:01:05.000Z",
+  },
+];
 
 export function PermissionsTable() {
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const [permissions, setPermissions] = useState(defaultPermissions)  
+  const [permissions, setPermissions] = useState(defaultPermissions);
   const itemsPerPage = 5;
 
   useEffect(() => {
     const fetchAndSetUsers = async () => {
       const permissions = await fetchData();
-      setPermissions(permissions)  
+      setPermissions(permissions);
     };
     fetchAndSetUsers();
   }, []);
 
   // Filter users based on search term
-  const filteredPermissions = permissions.filter(
-    (permission) =>
-        permission.name.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredPermissions = permissions.filter((permission) =>
+    permission.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   // Calculate pagination
@@ -86,7 +84,7 @@ export function PermissionsTable() {
           <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
           <Input
             type="search"
-            placeholder="Search users..."
+            placeholder="Search permissions..."
             className="pl-8"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
@@ -153,8 +151,8 @@ export function PermissionsTable() {
       <div className="flex items-center justify-between">
         <p className="text-sm text-muted-foreground">
           Showing {startIndex + 1} to{" "}
-          {Math.min(startIndex + itemsPerPage, filteredRoles.length)} of{" "}
-          {filteredRoles.length} users
+          {Math.min(startIndex + itemsPerPage, filteredPermissions.length)} of{" "}
+          {filteredPermissions.length} users
         </p>
         <div className="flex items-center space-x-2">
           <Button
