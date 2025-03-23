@@ -55,7 +55,7 @@ const defaultUsers = [
   },
 ];
 
-export function UsersTable() {
+export function UsersTable({ onAddUser }: { onAddUser: () => void }) {
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [users, setUsers] = useState([...defaultUsers]);
@@ -99,7 +99,7 @@ export function UsersTable() {
             onChange={(e) => setSearchTerm(e.target.value)}
           />
         </div>
-        <Button>
+        <Button onClick={onAddUser}>
           <UserPlus className="mr-2 h-4 w-4" />
           Add User
         </Button>
