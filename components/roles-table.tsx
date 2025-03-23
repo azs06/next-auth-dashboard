@@ -26,9 +26,6 @@ import {
   Search,
   UserPlus,
 } from "lucide-react";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Badge } from "@/components/ui/badge";
-
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 const token = localStorage.getItem("token") || "";
 
