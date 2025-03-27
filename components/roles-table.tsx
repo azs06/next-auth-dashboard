@@ -39,18 +39,6 @@ const fetchData = async () => {
   return result;
 };
 
-// Mock data for users
-const defaultUsers = [
-  {
-    id: "1",
-    name: "John Doe",
-    email: "john.doe@example.com",
-    role: "Admin",
-    status: "Active",
-    lastActive: "2 hours ago",
-    avatar: "/placeholder.svg?height=40&width=40",
-  },
-];
 
 const defaultRoles = [
   {
