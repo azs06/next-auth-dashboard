@@ -92,7 +92,7 @@ export function PermissionsTable() {
         </div>
         <Button>
           <UserPlus className="mr-2 h-4 w-4" />
-          Add Role
+          Add Permissions
         </Button>
       </div>
 
