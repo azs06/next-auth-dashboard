@@ -1,8 +1,13 @@
+'use client';
+
+import { useState } from "react";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs"
 import { RolesTable } from "@/components/roles-table"
 import { PermissionsTable } from "@/components/permissions-table"
+import { RoleFormModal } from "@/components/roles-form";
 
 export default function SettingsPage() {
+  const [showRoleModal, setShowRoleModal] = useState(false);
   return (
     <div className="space-y-6">
       <div>
@@ -21,7 +26,8 @@ export default function SettingsPage() {
           <p className="text-sm text-muted-foreground">General settings.</p>
         </TabsContent>
         <TabsContent value="roles">
-          <RolesTable></RolesTable>
+          <RolesTable onAddRole={() => setShowRoleModal(true)} ></RolesTable>
+          <RoleFormModal open={showRoleModal} onClose={() => setShowRoleModal(false)}></RoleFormModal>
         </TabsContent>
         <TabsContent value="permissions">
           <PermissionsTable></PermissionsTable>

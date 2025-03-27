@@ -39,7 +39,6 @@ const fetchData = async () => {
   return result;
 };
 
-
 const defaultRoles = [
   {
     id: 1,
@@ -60,12 +59,11 @@ const defaultRoles = [
   },
 ];
 
-export function RolesTable() {
+export function RolesTable({ onAddRole }: { onAddRole: () => void }) {
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [roles, setRoles] = useState([...defaultRoles]);
   const itemsPerPage = 5;
-
 
   useEffect(() => {
     const fetchAndSetUsers = async () => {
@@ -101,7 +99,7 @@ export function RolesTable() {
             onChange={(e) => setSearchTerm(e.target.value)}
           />
         </div>
-        <Button>
+        <Button onClick={onAddRole}>
           <UserPlus className="mr-2 h-4 w-4" />
           Add Role
         </Button>
@@ -129,7 +127,11 @@ export function RolesTable() {
                     </div>
                   </TableCell>
                   <TableCell>{role.description}</TableCell>
-                  <TableCell>{role.permissions.map(permission => permission.name).join(',')}</TableCell>
+                  <TableCell>
+                    {role.permissions
+                      .map((permission) => permission.name)
+                      .join(",")}
+                  </TableCell>
                   <TableCell>
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
