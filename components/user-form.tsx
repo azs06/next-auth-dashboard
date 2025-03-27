@@ -18,6 +18,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
+import { useToast } from "@/components/ui/use-toast";
 
 export function UserFormModal({
   open,
@@ -27,6 +28,7 @@ export function UserFormModal({
   onClose: () => void;
 }) {
   const [roles, setRoles] = useState([]);
+  const { toast } = useToast();
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -57,7 +59,21 @@ export function UserFormModal({
     setFormData({ ...formData, roleId: value });
   };
 
+  const validateForm = () => {
+    return Object.values(formData).every((value) => value
+      ? true
+      : false);
+  }
+
   const handleSubmit = async () => {
+    if (!validateForm()) {
+      toast({
+        title: "Error",
+        description: "Please fill out all fields",
+        variant: "destructive",
+      });
+      return;
+    }
     try {
       const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users`, {
         method: "POST",
