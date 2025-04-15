@@ -33,12 +33,14 @@ const schema = z.object({
 
 type FormData = z.infer<typeof schema>;
 
-export function UserFormModal({
+export function UserForm({
   open,
   onClose,
+  initialData,
 }: {
   open: boolean;
   onClose: () => void;
+  initialData?: FormData;
 }) {
   const [roles, setRoles] = useState([]);
   const { toast } = useToast();
@@ -51,6 +53,12 @@ export function UserFormModal({
     formState: { errors },
   } = useForm<FormData>({
     resolver: zodResolver(schema),
+    defaultValues: initialData || {
+      name: "",
+      email: "",
+      username: "",
+      roleId: "",
+    },
   });
 
   useEffect(() => {

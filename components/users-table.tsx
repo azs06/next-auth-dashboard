@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import {
   Table,
   TableBody,
@@ -28,6 +29,7 @@ import {
 } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
+
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 const token = localStorage.getItem("token") || "";
@@ -59,6 +61,7 @@ export function UsersTable({ onAddUser }: { onAddUser: () => void }) {
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [users, setUsers] = useState([...defaultUsers]);
+  const router = useRouter();
   const itemsPerPage = 5;
 
   useEffect(() => {
@@ -85,6 +88,19 @@ export function UsersTable({ onAddUser }: { onAddUser: () => void }) {
     startIndex,
     startIndex + itemsPerPage
   );
+  const viewProfile = () => {
+    console.log("View Profile clicked");
+  }
+  const editUser = (userId: string) => {
+    console.log('user id', userId);
+    //router.push(`/users/${userId}/edit`);
+  }
+  const changeRole = () => {
+    console.log("Change Role clicked");
+  }
+  const deleteUser = () => {
+    console.log("Delete User clicked");
+  }
 
   return (
     <div className="space-y-4">
@@ -154,10 +170,10 @@ export function UsersTable({ onAddUser }: { onAddUser: () => void }) {
                         </Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end">
-                        <DropdownMenuItem>View Profile</DropdownMenuItem>
-                        <DropdownMenuItem>Edit User</DropdownMenuItem>
-                        <DropdownMenuItem>Change Role</DropdownMenuItem>
-                        <DropdownMenuItem className="text-destructive">
+                        <DropdownMenuItem onClick={viewProfile}>View Profile</DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => editUser(user.id)}>Edit User</DropdownMenuItem>
+                        <DropdownMenuItem onClick={changeRole}>Change Role</DropdownMenuItem>
+                        <DropdownMenuItem onClick={deleteUser} className="text-destructive">
                           Delete User
                         </DropdownMenuItem>
                       </DropdownMenuContent>

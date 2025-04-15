@@ -1,7 +1,7 @@
 "use client";
 
 import { UsersTable } from "@/components/users-table";
-import { UserFormModal } from "@/components/user-form";
+import { UserForm } from "@/components/user-form";
 import { useState } from "react";
 
 export default function UsersPage() {
@@ -15,7 +15,7 @@ export default function UsersPage() {
         </p>
       </div>
       <UsersTable onAddUser={() => setModalOpen(true)} />
-      <UserFormModal open={modalOpen} onClose={() => setModalOpen(false)} ></UserFormModal>  
+      <UserForm open={modalOpen} onClose={() => setModalOpen(false)} ></UserForm>  
     </div>
   );
 }
