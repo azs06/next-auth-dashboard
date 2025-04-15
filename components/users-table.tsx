@@ -93,7 +93,7 @@ export function UsersTable({ onAddUser }: { onAddUser: () => void }) {
   }
   const editUser = (userId: string) => {
     console.log('user id', userId);
-    //router.push(`/users/${userId}/edit`);
+    router.push(`/dashboard/users/${userId}/edit`);
   }
   const changeRole = () => {
     console.log("Change Role clicked");
