@@ -29,7 +29,7 @@ import {
 } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
-
+import DeleteUserDialog from "@/components/delete-user-dialog";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 const token = localStorage.getItem("token") || "";
@@ -60,16 +60,20 @@ const defaultUsers = [
 export function UsersTable({ onAddUser }: { onAddUser: () => void }) {
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [selectedUserId, setSelectedUserId] = useState<number | string | null>(
+    null
+  );
   const [users, setUsers] = useState([...defaultUsers]);
   const router = useRouter();
   const itemsPerPage = 5;
+  const fetchAndSetUsers = async () => {
+    const users = await fetchUsers();
+    setUsers(users);
+    console.log({ users });
+  };
 
   useEffect(() => {
-    const fetchAndSetUsers = async () => {
-      const users = await fetchUsers();
-      setUsers(users);
-      console.log({ users });
-    };
     fetchAndSetUsers();
   }, []);
 
@@ -90,17 +94,23 @@ export function UsersTable({ onAddUser }: { onAddUser: () => void }) {
   );
   const viewProfile = () => {
     console.log("View Profile clicked");
-  }
+  };
   const editUser = (userId: string) => {
-    console.log('user id', userId);
     router.push(`/dashboard/users/${userId}/edit`);
-  }
+  };
+
   const changeRole = () => {
     console.log("Change Role clicked");
-  }
-  const deleteUser = () => {
-    console.log("Delete User clicked");
-  }
+  };
+
+  const deleteUser = (userId: string) => {
+    setSelectedUserId(userId);
+    setDeleteDialogOpen(true);
+  };
+
+  const onDeleteSuccess = () => {
+    fetchAndSetUsers();
+  };
 
   return (
     <div className="space-y-4">
@@ -152,12 +162,8 @@ export function UsersTable({ onAddUser }: { onAddUser: () => void }) {
                   </TableCell>
                   <TableCell>{user.roles}</TableCell>
                   <TableCell>
-                    <Badge
-                      variant={
-                        user.isActive ? "default" : "secondary"
-                      }
-                    >
-                      {user.isActive ? 'Active' : 'Inactive'}
+                    <Badge variant={user.isActive ? "default" : "secondary"}>
+                      {user.isActive ? "Active" : "Inactive"}
                     </Badge>
                   </TableCell>
                   <TableCell>{user.lastLogin}</TableCell>
@@ -170,10 +176,19 @@ export function UsersTable({ onAddUser }: { onAddUser: () => void }) {
                         </Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end">
-                        <DropdownMenuItem onClick={viewProfile}>View Profile</DropdownMenuItem>
-                        <DropdownMenuItem onClick={() => editUser(user.id)}>Edit User</DropdownMenuItem>
-                        <DropdownMenuItem onClick={changeRole}>Change Role</DropdownMenuItem>
-                        <DropdownMenuItem onClick={deleteUser} className="text-destructive">
+                        <DropdownMenuItem onClick={viewProfile}>
+                          View Profile
+                        </DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => editUser(user.id)}>
+                          Edit User
+                        </DropdownMenuItem>
+                        <DropdownMenuItem onClick={changeRole}>
+                          Change Role
+                        </DropdownMenuItem>
+                        <DropdownMenuItem
+                          onClick={() => deleteUser(user.id)}
+                          className="text-destructive"
+                        >
                           Delete User
                         </DropdownMenuItem>
                       </DropdownMenuContent>
@@ -238,6 +253,12 @@ export function UsersTable({ onAddUser }: { onAddUser: () => void }) {
           </Button>
         </div>
       </div>
+      <DeleteUserDialog
+        open={deleteDialogOpen}
+        onOpenChange={setDeleteDialogOpen}
+        userId={selectedUserId}
+        onDeleteSuccess={onDeleteSuccess}
+      />
     </div>
   );
 }
