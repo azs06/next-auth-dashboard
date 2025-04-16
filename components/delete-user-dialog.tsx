@@ -38,7 +38,7 @@ export default function DeleteUserDialog({
 
       if (!res.ok) throw new Error("Failed to delete user");
 
-      toast({ title: "User deleted successfully." });
+      toast({ title: "User deleted successfully.", duration: 2000 });
       onOpenChange(false);
       onDeleteSuccess?.();
     } catch (err) {
