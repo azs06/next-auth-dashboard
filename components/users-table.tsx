@@ -92,6 +92,7 @@ export function UsersTable({ onAddUser }: { onAddUser: () => void }) {
     startIndex,
     startIndex + itemsPerPage
   );
+  
   const viewProfile = () => {
     console.log("View Profile clicked");
   };
