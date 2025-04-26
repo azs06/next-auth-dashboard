@@ -113,7 +113,7 @@ export default function LoginForm() {
       </Button>
       <div className="text-center text-sm">
         <p className="text-gray-600 dark:text-gray-400">
-          Demo credentials: admin@example.com / password
+          Demo credentials: soikat@example.com / password
         </p>
       </div>
     </form>
