@@ -1,5 +1,6 @@
 'use client';
-
+// [userId]/edit/page.tsx
+// This file is responsible for rendering the edit user page.
 import { useEffect, useState } from "react";
 import { UserForm } from "@/components/user-form";
 import { useRouter } from "next/navigation";

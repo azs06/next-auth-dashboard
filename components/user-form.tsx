@@ -23,6 +23,7 @@ const schema = z.object({
   username: z.string().min(1, "Username is required"),
   password: z.string().min(6, "Password must be at least 6 characters"),
   roleId: z.string().min(1, "Role is required"),
+  id: z.string().optional(),
 });
 
 export type FormData = z.infer<typeof schema>;
@@ -73,24 +74,35 @@ export function UserForm({
 
   const onSubmit = async (formData: FormData) => {
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users`, {
-        method: "POST",
+      const token = localStorage.getItem("token");
+      const url =
+        initialData && initialData.id
+          ? `${process.env.NEXT_PUBLIC_API_URL}/users/${initialData.id}`
+          : `${process.env.NEXT_PUBLIC_API_URL}/users`;
+
+      const method = initialData && initialData.id ? "PUT" : "POST";
+
+      const res = await fetch(url, {
+        method,
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token") || ""}`,
+          Authorization: `Bearer ${token || ""}`,
         },
         body: JSON.stringify(formData),
       });
 
-      if (!res.ok) throw new Error("Failed to create user");
+      if (!res.ok) throw new Error("Failed to save user");
 
-      toast({ title: "Success", description: "User created!" });
+      toast({
+        title: "Success",
+        description: `User ${method === "POST" ? "created" : "updated"}!`,
+      });
       onSuccess();
     } catch (err) {
-      console.error("Error creating user:", err);
+      console.error("Error saving user:", err);
       toast({
         title: "Error",
-        description: "Something went wrong while creating the user",
+        description: "Something went wrong while saving the user",
         variant: "destructive",
       });
     }
