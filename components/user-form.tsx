@@ -5,7 +5,13 @@ import { useEffect, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -47,6 +53,8 @@ export function UserForm({
       roleId: "",
     },
   });
+
+  const showPasswordInput = initialData ? false : true;
 
   useEffect(() => {
     const fetchRoles = async () => {
@@ -93,26 +101,40 @@ export function UserForm({
       <div>
         <Label>Name</Label>
         <Input {...register("name")} />
-        {errors.name && <p className="text-sm text-red-500">{errors.name.message}</p>}
+        {errors.name && (
+          <p className="text-sm text-red-500">{errors.name.message}</p>
+        )}
       </div>
       <div>
         <Label>Email</Label>
         <Input type="email" {...register("email")} />
-        {errors.email && <p className="text-sm text-red-500">{errors.email.message}</p>}
+        {errors.email && (
+          <p className="text-sm text-red-500">{errors.email.message}</p>
+        )}
       </div>
       <div>
         <Label>Username</Label>
         <Input {...register("username")} />
-        {errors.username && <p className="text-sm text-red-500">{errors.username.message}</p>}
+        {errors.username && (
+          <p className="text-sm text-red-500">{errors.username.message}</p>
+        )}
       </div>
-      <div>
-        <Label>Password</Label>
-        <Input type="password" {...register("password")} />
-        {errors.password && <p className="text-sm text-red-500">{errors.password.message}</p>}
-      </div>
+      {showPasswordInput && (
+        <div>
+          <Label>Password</Label>
+          <Input type="password" {...register("password")} />
+          {errors.password && (
+            <p className="text-sm text-red-500">{errors.password.message}</p>
+          )}
+        </div>
+      )}
+
       <div>
         <Label>Role</Label>
-        <Select onValueChange={(val) => setValue("roleId", val)} defaultValue={initialData?.roleId || ""}>
+        <Select
+          onValueChange={(val) => setValue("roleId", val)}
+          defaultValue={initialData?.roleId || ""}
+        >
           <SelectTrigger>
             <SelectValue placeholder="Select a role" />
           </SelectTrigger>
@@ -124,9 +146,13 @@ export function UserForm({
             ))}
           </SelectContent>
         </Select>
-        {errors.roleId && <p className="text-sm text-red-500">{errors.roleId.message}</p>}
+        {errors.roleId && (
+          <p className="text-sm text-red-500">{errors.roleId.message}</p>
+        )}
       </div>
-      <Button type="submit" className="w-full">Save</Button>
+      <Button type="submit" className="w-full">
+        Save
+      </Button>
     </form>
   );
 }
