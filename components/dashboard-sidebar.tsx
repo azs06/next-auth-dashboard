@@ -5,7 +5,7 @@ import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
-import { LayoutDashboard, Users, Settings, HelpCircle, LogOut, Menu, X } from "lucide-react"
+import { LayoutDashboard, Users, Settings, HelpCircle, LogOut, Menu, X, User } from "lucide-react"
 
 export default function DashboardSidebar() {
   const pathname = usePathname()
@@ -23,7 +23,7 @@ export default function DashboardSidebar() {
     { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
     { name: "Users", href: "/dashboard/users", icon: Users },
     { name: "Settings", href: "/dashboard/settings", icon: Settings },
-    /* { name: "Help", href: "/dashboard/help", icon: HelpCircle }, */
+    { name: "Profile", href: "/dashboard/profile", icon: User },
   ]
 
   return (

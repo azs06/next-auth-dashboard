@@ -31,9 +31,13 @@ export type FormData = z.infer<typeof schema>;
 export function UserForm({
   onSuccess,
   initialData,
+  disablePassword = false,
+  disableRoleSelect = false,
 }: {
   onSuccess: () => void;
   initialData?: FormData;
+  disablePassword?: boolean;
+  disableRoleSelect?: boolean;
 }) {
   const [roles, setRoles] = useState([]);
   const { toast } = useToast();
@@ -55,7 +59,6 @@ export function UserForm({
     },
   });
 
-  const showPasswordInput = initialData ? false : true;
 
   useEffect(() => {
     const fetchRoles = async () => {
@@ -131,7 +134,7 @@ export function UserForm({
           <p className="text-sm text-red-500">{errors.username.message}</p>
         )}
       </div>
-      {showPasswordInput && (
+      {!disablePassword && (
         <div>
           <Label>Password</Label>
           <Input type="password" {...register("password")} />
@@ -140,28 +143,30 @@ export function UserForm({
           )}
         </div>
       )}
+      {!disableRoleSelect && (
+        <div>
+          <Label>Role</Label>
+          <Select
+            onValueChange={(val) => setValue("roleId", val)}
+            defaultValue={initialData?.roleId || ""}
+          >
+            <SelectTrigger>
+              <SelectValue placeholder="Select a role" />
+            </SelectTrigger>
+            <SelectContent>
+              {roles.map((role) => (
+                <SelectItem key={role.id} value={role.id.toString()}>
+                  {role.name}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+          {errors.roleId && (
+            <p className="text-sm text-red-500">{errors.roleId.message}</p>
+          )}
+        </div>
+      )}
 
-      <div>
-        <Label>Role</Label>
-        <Select
-          onValueChange={(val) => setValue("roleId", val)}
-          defaultValue={initialData?.roleId || ""}
-        >
-          <SelectTrigger>
-            <SelectValue placeholder="Select a role" />
-          </SelectTrigger>
-          <SelectContent>
-            {roles.map((role) => (
-              <SelectItem key={role.id} value={role.id.toString()}>
-                {role.name}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-        {errors.roleId && (
-          <p className="text-sm text-red-500">{errors.roleId.message}</p>
-        )}
-      </div>
       <Button type="submit" className="w-full">
         Save
       </Button>

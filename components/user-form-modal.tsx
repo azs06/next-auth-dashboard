@@ -27,7 +27,7 @@ export function UserFormModal({
           <DialogTitle>{initialData ? "Edit User" : "Add New User"}</DialogTitle>
         </DialogHeader>
 
-        <UserForm initialData={initialData} onSuccess={onClose} />
+        <UserForm initialData={initialData} disablePassword onSuccess={onClose} />
 
         <DialogFooter className="pt-2">
           <Button variant="outline" type="button" onClick={onClose}>
