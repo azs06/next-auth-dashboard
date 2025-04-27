@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { useTheme } from "next-themes"
+import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { Bell, Moon, Sun, User } from "lucide-react"
@@ -9,6 +10,7 @@ import { Bell, Moon, Sun, User } from "lucide-react"
 export default function DashboardHeader() {
   const { setTheme } = useTheme()
   const [user, setUser] = useState<{ name: string; email: string } | null>(null)
+  const router = useRouter()
 
   useEffect(() => {
     const userData = localStorage.getItem("user")
@@ -62,13 +64,15 @@ export default function DashboardHeader() {
                   )}
                 </div>
               </div>
-              <DropdownMenuItem>Profile</DropdownMenuItem>
+              <DropdownMenuItem onClick={() => {
+                router.push("/dashboard/profile")
+              }}>Profile</DropdownMenuItem>
               <DropdownMenuItem>Settings</DropdownMenuItem>
               <DropdownMenuItem
                 onClick={() => {
-                  localStorage.removeItem("isAuthenticated")
+                  localStorage.removeItem("token")
                   localStorage.removeItem("user")
-                  window.location.href = "/"
+                  router.push("/login")
                 }}
               >
                 Log out

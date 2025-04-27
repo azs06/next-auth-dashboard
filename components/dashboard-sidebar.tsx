@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import { useRouter } from "next/navigation"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { Button } from "@/components/ui/button"
@@ -10,6 +11,7 @@ import { LayoutDashboard, Users, Settings, HelpCircle, LogOut, Menu, X, User } f
 export default function DashboardSidebar() {
   const pathname = usePathname()
   const [isOpen, setIsOpen] = useState(false)
+  const router = useRouter()
 
   const toggleSidebar = () => {
     setIsOpen(!isOpen)
@@ -75,9 +77,9 @@ export default function DashboardSidebar() {
               variant="outline"
               className="w-full justify-start"
               onClick={() => {
-                localStorage.removeItem("isAuthenticated")
+                localStorage.removeItem("token")
                 localStorage.removeItem("user")
-                window.location.href = "/"
+                router.push("/")
               }}
             >
               <LogOut className="mr-2 h-4 w-4" />
