@@ -72,7 +72,7 @@ export default function DashboardHeader() {
                 onClick={() => {
                   localStorage.removeItem("token")
                   localStorage.removeItem("user")
-                  router.push("/login")
+                  router.push("/")
                 }}
               >
                 Log out
