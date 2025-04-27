@@ -1,10 +1,12 @@
 // components/user-form.tsx
 "use client";
 
+import React from "react";
 import { useEffect, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   Select,
   SelectContent,
@@ -41,6 +43,7 @@ export function UserForm({
 }) {
   const [roles, setRoles] = useState([]);
   const { toast } = useToast();
+  const [enablePasswordInput, setEnablePasswordInput] = useState(false);
 
   const {
     register,
@@ -58,7 +61,6 @@ export function UserForm({
       roleId: "",
     },
   });
-
 
   useEffect(() => {
     const fetchRoles = async () => {
@@ -136,11 +138,17 @@ export function UserForm({
       </div>
       {!disablePassword && (
         <div>
-          <Label>Password</Label>
-          <Input type="password" {...register("password")} />
-          {errors.password && (
-            <p className="text-sm text-red-500">{errors.password.message}</p>
-          )}
+            <div className="flex items-center space-x-2">
+            <Checkbox id="set-password" checked={enablePasswordInput} onCheckedChange={(v) => setEnablePasswordInput(!!v)} />
+            <Label htmlFor="set-password">Change Password</Label>
+          </div>
+          <div>
+            <Label>Password</Label>
+            <Input type="password" disabled={!enablePasswordInput} {...register("password")} />
+            {errors.password && (
+              <p className="text-sm text-red-500">{errors.password.message}</p>
+            )}
+          </div>
         </div>
       )}
       {!disableRoleSelect && (
