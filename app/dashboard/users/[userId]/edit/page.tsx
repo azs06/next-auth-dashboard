@@ -33,7 +33,7 @@ export default function EditUserPage({ params }: { params: { userId: string } })
 
   return (
     <div className="max-w-2xl mx-auto py-10">
-      <h1 className="text-3xl font-bold mb-6">Edit User</h1>
+      <h1 className="text-3xl font-bold mb-6">Edit User: {user.name}</h1>
       <UserForm open={true} initialData={user} />
     </div>
   );
